@@ -11,6 +11,10 @@
 		13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 13B07FB51A68108700A75B9A /* Images.xcassets */; };
 		761780ED2CA45674006654EE /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 761780EC2CA45674006654EE /* AppDelegate.swift */; };
 		81AB9BB82411601600AC10FF /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */; };
+		A747B1DA2FFC240100FEC8F1 /* AKJV.db in Resources */ = {isa = PBXBuildFile; fileRef = A747B1D62FFC240100FEC8F1 /* AKJV.db */; };
+		A747B1DB2FFC240100FEC8F1 /* ASV.db in Resources */ = {isa = PBXBuildFile; fileRef = A747B1D72FFC240100FEC8F1 /* ASV.db */; };
+		A747B1DC2FFC240100FEC8F1 /* Tamil.db in Resources */ = {isa = PBXBuildFile; fileRef = A747B1D92FFC240100FEC8F1 /* Tamil.db */; };
+		A747B1DD2FFC240100FEC8F1 /* KJV.db in Resources */ = {isa = PBXBuildFile; fileRef = A747B1D82FFC240100FEC8F1 /* KJV.db */; };
 		EFE39F821E910B45924D47BD /* PrivacyInfo.xcprivacy in Resources */ = {isa = PBXBuildFile; fileRef = 13B07FB81A68108700A75B9A /* PrivacyInfo.xcprivacy */; };
 /* End PBXBuildFile section */
 
@@ -24,6 +28,10 @@
 		5DCACB8F33CDC322A6C60F78 /* libPods-BibleApp.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-BibleApp.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		761780EC2CA45674006654EE /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = AppDelegate.swift; path = BibleApp/AppDelegate.swift; sourceTree = "<group>"; };
 		81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = LaunchScreen.storyboard; path = BibleApp/LaunchScreen.storyboard; sourceTree = "<group>"; };
+		A747B1D62FFC240100FEC8F1 /* AKJV.db */ = {isa = PBXFileReference; lastKnownFileType = file; path = AKJV.db; sourceTree = "<group>"; };
+		A747B1D72FFC240100FEC8F1 /* ASV.db */ = {isa = PBXFileReference; lastKnownFileType = file; path = ASV.db; sourceTree = "<group>"; };
+		A747B1D82FFC240100FEC8F1 /* KJV.db */ = {isa = PBXFileReference; lastKnownFileType = file; path = KJV.db; sourceTree = "<group>"; };
+		A747B1D92FFC240100FEC8F1 /* Tamil.db */ = {isa = PBXFileReference; lastKnownFileType = file; path = Tamil.db; sourceTree = "<group>"; };
 		ED297162215061F000B7C4FE /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = System/Library/Frameworks/JavaScriptCore.framework; sourceTree = SDKROOT; };
 /* End PBXFileReference section */
 
@@ -70,6 +78,10 @@
 		83CBB9F61A601CBA00E9B192 = {
 			isa = PBXGroup;
 			children = (
+				A747B1D62FFC240100FEC8F1 /* AKJV.db */,
+				A747B1D72FFC240100FEC8F1 /* ASV.db */,
+				A747B1D82FFC240100FEC8F1 /* KJV.db */,
+				A747B1D92FFC240100FEC8F1 /* Tamil.db */,
 				13B07FAE1A68108700A75B9A /* BibleApp */,
 				832341AE1AAA6A7D00B99B32 /* Libraries */,
 				83CBBA001A601CBA00E9B192 /* Products */,
@@ -161,6 +173,10 @@
 				81AB9BB82411601600AC10FF /* LaunchScreen.storyboard in Resources */,
 				13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */,
 				EFE39F821E910B45924D47BD /* PrivacyInfo.xcprivacy in Resources */,
+				A747B1DA2FFC240100FEC8F1 /* AKJV.db in Resources */,
+				A747B1DB2FFC240100FEC8F1 /* ASV.db in Resources */,
+				A747B1DC2FFC240100FEC8F1 /* Tamil.db in Resources */,
+				A747B1DD2FFC240100FEC8F1 /* KJV.db in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -191,9 +207,13 @@
 			inputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-BibleApp/Pods-BibleApp-frameworks-${CONFIGURATION}-input-files.xcfilelist",
 			);
+			inputPaths = (
+			);
 			name = "[CP] Embed Pods Frameworks";
 			outputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-BibleApp/Pods-BibleApp-frameworks-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -230,9 +250,13 @@
 			inputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-BibleApp/Pods-BibleApp-resources-${CONFIGURATION}-input-files.xcfilelist",
 			);
+			inputPaths = (
+			);
 			name = "[CP] Copy Pods Resources";
 			outputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-BibleApp/Pods-BibleApp-resources-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -259,7 +283,10 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
+				CODE_SIGN_IDENTITY = "Apple Development";
+				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = MX9T3XEQX5;
 				ENABLE_BITCODE = NO;
 				INFOPLIST_FILE = BibleApp/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 15.1;
@@ -273,8 +300,9 @@
 					"-ObjC",
 					"-lc++",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = "org.reactjs.native.example.$(PRODUCT_NAME:rfc1034identifier)";
+				PRODUCT_BUNDLE_IDENTIFIER = org.reactjs.native.bible.app;
 				PRODUCT_NAME = BibleApp;
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
@@ -289,7 +317,10 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
+				CODE_SIGN_IDENTITY = "Apple Development";
+				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = MX9T3XEQX5;
 				INFOPLIST_FILE = BibleApp/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 15.1;
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -302,8 +333,9 @@
 					"-ObjC",
 					"-lc++",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = "org.reactjs.native.example.$(PRODUCT_NAME:rfc1034identifier)";
+				PRODUCT_BUNDLE_IDENTIFIER = org.reactjs.native.bible.app;
 				PRODUCT_NAME = BibleApp;
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
