@@ -4,6 +4,7 @@ import {ReadStackParamList} from "./Types";
 
 import BookScreen from '../screens/read/BookScreen';
 import ChapterScreen from '../screens/read/ChapterScreen';
+import VerseScreen from '../screens/read/VerseScreen';
 import ReadingScreen from '../screens/read/ReadingScreen';
 
 export default function ReadNavigator() {
@@ -19,6 +20,11 @@ export default function ReadNavigator() {
             <Stack.Screen
             name="Chapters"
             component={ChapterScreen}
+            />
+
+            <Stack.Screen
+            name="Verses"
+            component={VerseScreen}
             />
 
             <Stack.Screen
