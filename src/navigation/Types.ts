@@ -23,5 +23,6 @@ export type ReadStackParamList = {
 export type RootTabParamList = {
   Home: undefined;
   Feed: undefined;
+  NASA: undefined;
   Read: NavigatorScreenParams<ReadStackParamList>;
 };

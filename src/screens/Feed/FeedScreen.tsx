@@ -1,66 +1,43 @@
+/* Imports */
 import {
-  View,
-  Text,
-  StyleSheet,
-  ScrollView,
-  Pressable,
-  Image,
-  Linking,
-  Share,
-  StatusBar,
-  Animated,
-  FlatList,
-  SafeAreaView
+  View, Text, Pressable,
+  Image, StatusBar, FlatList
 } from 'react-native';
-import { BibleRepository } from '../../database/BibleRepository';
-import { BibleNewsFeedResponse } from '../../models/BibleFeeds';
-import React, { useCallback, useEffect, useState } from 'react';
+import { SafeAreaView } from 'react-native-safe-area-context';
+import React, { useState } from 'react';
 import { homeStyles } from '../../Styles/HomeStyle';
 import { feedStyles } from '../../Styles/FeedStyle';
 import { BibleNewsItem } from '../../models/BibleFeeds';
 import  WebView  from 'react-native-webview';
 import { ArrowLeft } from 'lucide-react-native';
-import { SvgUri } from 'react-native-svg';
+import { decodeHtml ,useFeedViewModel } from '../../hooks/useFeedViewModel';
+
+function FeedItemImage({ uri }: { uri: string | null }) {
+  const [failed, setFailed] = useState(false);
+
+  if (!uri || failed) return null;
+
+  return (
+    <Image
+      source={{ uri }}
+      style={feedStyles.feedImage}
+      resizeMode="cover"
+      onError={() => setFailed(true)}
+    />
+  );
+}
 
 export default function FeedScreen() {
+  const [selectedUrl, setSelectedUrl] = useState<string | null>(null);
+  const { 
+    items, title, loading, error,
+    selectedFeed, selectFeed, feedTags, reload 
+  } = useFeedViewModel();
 
-const [Feed, setFeed] = useState<BibleNewsFeedResponse | null>(null);
-const [error, SetError] = useState<String | null>(null);
-const [loading, setLoading] = useState(true);
-const [selectedUrl, setSelectedUrl] = useState<string | null>(null);
-const feedImageUrl = Feed?.feed.image?.trim();
+  const renderFeedItem = ({ item }: { item: BibleNewsItem }) => (
 
-    useEffect(() => {
-      loadFeeds();
-    }, []);
-
-    const loadFeeds = async() => {
-        try {
-          setLoading(true);
-          SetError(null);
-
-          const feeds = await BibleRepository.getBibleFeeds();
-          console.log('Feed Image Url')
-          console.log(feeds.feed.image)
-          console.log(feeds);
-          setFeed(feeds);
-        } catch (error) {
-          setLoading(false);
-          SetError('Failed to load Feeds');
-          console.log(error);
-        } finally {
-          setLoading(false);
-        }
-    }
-
-    const renderFeedItem = ({ item }: { item: BibleNewsItem }) => (
     <View style={feedStyles.feedCard}>
-      {item.image && (
-        <Image
-          source={{ uri: item.image }}
-          style={feedStyles.feedImage}
-        />
-      )}
+      <FeedItemImage uri={item.image?.trim() || null} />
 
       <View style={homeStyles.container}>
         <Text style={feedStyles.feedTitle} numberOfLines={0}>
@@ -71,51 +48,89 @@ const feedImageUrl = Feed?.feed.image?.trim();
           {item.description}
         </Text>
 
-        <Pressable onPress={() => setSelectedUrl(item.link)} >
+        {item.author && (
+          <Text style={feedStyles.feedAuthorText}>{item.author}</Text>
+        )}
+
+        <Pressable onPress={() => setSelectedUrl(item.link)}>
           <Text style={feedStyles.feedReadArtText}>Read article →</Text>
         </Pressable>
       </View>
     </View>
   );
-    if (selectedUrl) {
-       return (
-         <SafeAreaView style={homeStyles.safeArea}>
-           <View style={homeStyles.header}>
-             <Pressable onPress={() => setSelectedUrl(null)}>
-               <ArrowLeft color="#FFFFFF" size={24} />
-             </Pressable>
 
-             <Text style={feedStyles.feedHeader}>Bible News</Text>
-           </View>
-
-           <WebView
-             source={{ uri: selectedUrl }}
-             style={{ flex: 1 }}
-             startInLoadingState
-           />
-         </SafeAreaView>
-       );
-    }
+  if (selectedUrl) {
     return (
       <SafeAreaView style={homeStyles.safeArea}>
-        <StatusBar barStyle="light-content" backgroundColor="#00191A" />
+        <View style={homeStyles.header}>
+          <Pressable onPress={() => setSelectedUrl(null)}>
+            <ArrowLeft color="#FFFFFF" size={24} />
+          </Pressable>
 
-        <View style={feedStyles.feedHeader}>
-          <Text style={homeStyles.appTitle}>{Feed?.feed.title}</Text>
+          <Text style={feedStyles.feedHeader}>Bible News</Text>
         </View>
 
-        <FlatList
-          data={Feed?.items}
-          keyExtractor={item => item.id}
-          renderItem={renderFeedItem}
-          contentContainerStyle={homeStyles.scrollContent}
-          showsVerticalScrollIndicator={false}
-          ListHeaderComponent={
-            <Text style={homeStyles.sectionTitle}>Bible News</Text>
-          }
-          refreshing={loading}
-          onRefresh={loadFeeds}
+        <WebView
+          source={{ uri: selectedUrl }}
+          style={{ flex: 1 }}
+          startInLoadingState
         />
       </SafeAreaView>
     );
+  }
+
+  return (
+    <SafeAreaView style={homeStyles.safeArea}>
+      <StatusBar barStyle="light-content" backgroundColor="#00191A" />
+
+      <View style={feedStyles.feedHeader}>
+        <Text style={feedStyles.feedHeaderTitle}>{decodeHtml(title)}</Text>
+      </View>
+
+      <FlatList
+        style={feedStyles.tagList}
+        data={feedTags}
+        horizontal
+        directionalLockEnabled
+        bounces={false}
+        keyExtractor={item => item.type}
+        renderItem={({ item }) => {
+          const isSelected = selectedFeed === item.type;
+
+          return (
+            <Pressable
+              style={[
+                feedStyles.tagButton,
+                isSelected && feedStyles.selectedTagButton,
+              ]}
+              onPress={() => selectFeed(item.type)}
+            >
+
+              <Text
+                style={[
+                  feedStyles.tagText,
+                  isSelected && feedStyles.selectedTagText,
+                ]}
+              >
+                {item.label}
+              </Text>
+            </Pressable>
+          );
+        }}
+        contentContainerStyle={feedStyles.tagContent}
+        showsHorizontalScrollIndicator={false}
+      />
+
+      <FlatList
+        style={feedStyles.feedList}
+        data={items}
+        keyExtractor={item => item.id}
+        renderItem={renderFeedItem}
+        contentContainerStyle={homeStyles.scrollContent}
+        showsVerticalScrollIndicator={false}
+        refreshing={loading}
+        onRefresh={reload}
+      />
+    </SafeAreaView>
+  );
 }

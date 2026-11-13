@@ -8,7 +8,7 @@ export interface BibleNewsItem {
   author?: string;
 }
 
-export interface BibleNewsFeedResponse {
+export interface NewsFeedResponse {
   status: 'ok' | 'error';
   message?: string;
   feed: {

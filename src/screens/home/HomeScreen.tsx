@@ -8,6 +8,9 @@ import {
     Wind,
     CloudFog,
     Moon,
+    Droplets,
+    Thermometer,
+    MapPin,
 } from 'lucide-react-native';
 import {
   View,
@@ -17,6 +20,7 @@ import {
   Pressable,
   Share,
   Clipboard,
+  Image,
   SafeAreaView,
   StatusBar,
   Animated,
@@ -165,6 +169,10 @@ export default function HomeScreen() {
     return 'Good Evening';
   };
 
+  const weatherIcon = weather?.current.condition.icon
+    ? `https:${weather.current.condition.icon}`
+    : null;
+
   return (
     <SafeAreaView style={homeStyles.safeArea}>
       <StatusBar barStyle="light-content" backgroundColor="#00191A" />
@@ -188,30 +196,39 @@ export default function HomeScreen() {
         </View>
 
         {/* Weather */}
-        
-        <Text style={homeStyles.sectionTitle}>
-          {getGreeting()}
-        </Text>
-  
-        <View style={homeStyles.weatherContainer}>
-            {loading && ( 
-              <Text style={homeStyles.sectionTitle}>
-                  Loading Weather
+        <View style={homeStyles.weatherCard}>
+          <View style={homeStyles.weatherCompactRow}>
+            <View style={homeStyles.weatherCompactLocation}>
+              <MapPin color="#D4AF37" size={14} />
+              <Text style={homeStyles.weatherLocation} numberOfLines={1}>
+                {weather?.location.name || 'Weather'}
               </Text>
-            )}
+            </View>
 
-            {error && (
-              <Text style={homeStyles.sectionTitle}>
-                  {error}
-              </Text>
-            )}
+            {loading ? (
+              <Text style={homeStyles.weatherLoadingText}>Loading...</Text>
+            ) : error ? (
+              <Text style={homeStyles.weatherLoadingText}>Unavailable</Text>
+            ) : weather ? (
+              <>
+                {weatherIcon ? (
+                  <Image source={{ uri: weatherIcon }} style={homeStyles.weatherCompactIcon} />
+                ) : (
+                  <Cloud color="#D4AF37" size={25} />
+                )}
+                <Text style={homeStyles.weatherCompactTemperature}>
+                  {Math.round(weather.current.temp_f)}°
+                </Text>
+                <Text style={homeStyles.weatherCompactCondition} numberOfLines={1}>
+                  {weather.current.condition.text}
+                </Text>
+              </>
+            ) : null}
 
-            <Text style={homeStyles.wTitle}>
-              {weather?.location.name}
-            </Text>
-            <Text style={homeStyles.wValue}>
-               {weather?.current.temp_f}
-            </Text>
+            <Pressable style={homeStyles.weatherCompactRefresh} onPress={loadWeather} accessibilityLabel="Refresh weather">
+              <RefreshCw color="#9EC5C7" size={15} />
+            </Pressable>
+          </View>
         </View>
 
         {/* Verse of the Day Main Card */}
