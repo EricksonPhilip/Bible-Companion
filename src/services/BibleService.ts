@@ -2,7 +2,9 @@ import { BibleRepository } from "../database/BibleRepository";
 import { CURATED_DAILY_VERSES } from "../data/dailyVerses";
 import { DailyVerse } from "../models/DailyVerse";
 import { WeatherResponse } from "../data/Weather";
-import { BibleNewsFeedResponse } from "../models/BibleFeeds";
+import { NewsFeedResponse } from "../models/BibleFeeds";
+import { NASAAstroDay } from "../models/NASAAstroDay";
+import { FeedType } from "../database/BibleRepository";
 
 export class BibleServices {
     static getBooks() {
@@ -41,11 +43,20 @@ export class BibleServices {
         }
     }
 
-    static async getBibleFeeds(): Promise<BibleNewsFeedResponse> {
+    static async getFeeds(feedType: FeedType): Promise<NewsFeedResponse> {
         try {
-            return await BibleRepository.getBibleFeeds();
+            return await BibleRepository.getFeeds(feedType);
         } catch (error) {
             console.error('Failed to fetch Bible news:', error);
+            throw error;
+        }
+    }
+
+    static async getAstroPicOfThenDay(): Promise<[NASAAstroDay]> {
+         try {
+            return await BibleRepository.getAstroPicOfTheDay();
+        } catch (error) {
+            console.error('Failed to fetch NASA service:', error);
             throw error;
         }
     }

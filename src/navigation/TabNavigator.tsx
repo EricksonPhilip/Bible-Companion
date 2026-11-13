@@ -1,41 +1,41 @@
 import React from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import { House, BookOpen, Newspaper } from 'lucide-react-native';
+import { House, BookOpen, Newspaper, Rocket } from 'lucide-react-native';
 import { StyleSheet, View, Text } from 'react-native';
 import HomeScreen from '../screens/home/HomeScreen';
 import FeedScreen from '../screens/Feed/FeedScreen';
 import ReadNavigator from './ReadNavigator';
 import { RootTabParamList } from './Types';
+import NASAScreen from '../screens/NASA/NASAScreen';
 
 const Tab = createBottomTabNavigator<RootTabParamList>();
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#00191A',
+    backgroundColor: '#5ec4c7',
   },
   tabBar: {
-    backgroundColor: '#00191A',
+    backgroundColor: '#023e40',
     borderTopWidth: 1,
     borderTopColor: '#0E3B3E',
-    paddingBottom: 4,
+    paddingBottom: 2,
     paddingTop: 8,
   },
   tabLabel: {
-    fontSize: 12,
+    fontSize: 17,
     fontWeight: '600',
-    marginTop: 4,
+    padding: 12 
   },
   iconContainer: {
     alignItems: 'center' as const,
   },
   activeIndicator: {
     width: 32,
-    height: 3,
+    height: 0,
     backgroundColor: '#D4AF37',
     borderRadius: 1.5,
-    marginBottom: 4,
   },
 });
 
@@ -66,6 +66,15 @@ function FeedTabIcon({ color, size, focused }: { color: string; size: number; fo
   );
 }
 
+function NasaTabIcon({ color, size, focused }: { color: string; size: number; focused?: boolean }) {
+  return (
+    <View style={styles.iconContainer}>
+      {focused && <View style={styles.activeIndicator} />}
+      <Rocket color={color} size={size} strokeWidth={focused ? 2.5 : 2} />
+    </View>
+  );
+}
+
 export default function TabNavigator() {
   return (
     <NavigationContainer>
@@ -77,45 +86,43 @@ export default function TabNavigator() {
           tabBarActiveTintColor: '#D4AF37',
           tabBarInactiveTintColor: '#81A3A5',
           tabBarLabel: ({ color }) => (
-            <Text style={[styles.tabLabel, { color }]}>
-              {route.name === 'Home' ? 'Home' : 'Read'}
-            </Text>
+            <Text style={[styles.tabLabel, { color }]}></Text>
           ),
           tabBarIcon: ({ color, size, focused }) => {
             if (route.name === 'Home') {
               return <HomeTabIcon color={color} size={size} focused={focused} />;
+            } else if (route.name == 'Read') {
+               return <ReadTabIcon color={color} size={size} focused={focused} />;
+               
             } else if (route.name == 'Feed') {
                return <FeedTabIcon color={color} size={size} focused={focused} />;
             } else {
-               return <ReadTabIcon color={color} size={size} focused={focused} />;
+               return <NasaTabIcon color={color} size={size} focused={focused} />;
             }
-            
           },
         })}
       >
         <Tab.Screen
           name="Home"
           component={HomeScreen}
-          options={{
-            tabBarLabel: 'Home',
-          }}
+        />
+
+         <Tab.Screen
+          name="Read"
+          component={ReadNavigator}
         />
 
         <Tab.Screen
           name="Feed"
           component={FeedScreen}
-          options={{
-            tabBarLabel: 'Feed',
-          }}
         />
 
         <Tab.Screen
-          name="Read"
-          component={ReadNavigator}
-          options={{
-            tabBarLabel: 'Read',
-          }}
+          name="NASA"
+          component={NASAScreen}
         />
+
+       
       </Tab.Navigator>
     </NavigationContainer>
   );

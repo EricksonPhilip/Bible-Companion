@@ -5,14 +5,24 @@ import { Book } from '../data/book';
 import { BibleVersion } from '../types/BibleVersion';
 import { CURATED_DAILY_VERSES, CuratedVerseRef } from '../data/dailyVerses';
 import { WeatherResponse } from '../data/Weather';
+import { NASAAstroDay } from '../models/NASAAstroDay';
 import {
-  BibleNewsFeedResponse,
+  NewsFeedResponse,
   Rss2JsonResponse,
 } from '../models/BibleFeeds';
 
 export interface VerseWithBook extends Verse {
     bookName: string;
 }
+
+const extractImageUrl = (html?: string): string | null => {
+    if (!html) return null;
+
+    const match = html.match(/<img[^>]+src=["']([^"']+)["']/i);
+    const url = match?.[1]?.replace(/&amp;/g, '&').trim();
+
+    return url && /^https?:\/\//i.test(url) ? url : null;
+};
 
 export class BibleRepository {
 
@@ -212,17 +222,35 @@ export class BibleRepository {
         return data
     }
 
-    static async getCurrentWeatherImage() {
+    static async getFeeds(feedType: FeedType): Promise<NewsFeedResponse> {
+        // const rssUrl = encodeURIComponent(
+        //     'https://techcrunch.com/feed/'
+        // );
         
-    }
+        console.log(feedType)
+        
+        var rssUrl = ''
 
-    static async getBibleFeeds(): Promise<BibleNewsFeedResponse> {
-        const rssUrl = encodeURIComponent(
-            'https://www.christiantoday.com/rss.xml'
-        );
+        switch (feedType) {
+            case FeedType.All:
+                rssUrl = 'https://www.theguardian.com/world/rss'
+                break;
+            case FeedType.News:
+                rssUrl = 'https://feeds.bbci.co.uk/news/rss.xml'
+                break;
+            case FeedType.Tech:
+                rssUrl = 'https://techcrunch.com/feed/'
+                break;
+            case FeedType.Finance:
+                rssUrl = 'https://feeds.a.dj.com/rss/RSSMarketsMain.xml'
+                break;
+
+        }
+
+   
 
         const url =
-            `https://api.rss2json.com/v1/api.json?rss_url=${rssUrl}`;
+            `https://api.rss2json.com/v1/api.json?rss_url=${encodeURIComponent(rssUrl)}`;
 
         console.log("Feed Url..")
         console.log(url)
@@ -251,11 +279,38 @@ export class BibleRepository {
                 id: item.guid || item.link,
                 title: item.title,
                 description: item.description.replace(/<[^>]*>/g, '').trim(),
-                image: item.thumbnail || item.enclosure?.link || null,
+                image:
+                    item.thumbnail?.trim() ||
+                    (item.enclosure?.type?.startsWith('image/')
+                        ? item.enclosure.link?.trim()
+                        : null) ||
+                    extractImageUrl(item.content) ||
+                    extractImageUrl(item.description),
                 link: item.link,
                 publishedAt: item.pubDate,
                 author: item.author,
             })),
         };
     }
+
+    static async getAstroPicOfTheDay(): Promise<[NASAAstroDay]> {
+
+        const url = `https://science.nasa.gov/wp-json/wp/v2/apod-basic`;
+
+        console.log("NASA Astro of the Day Url..")
+        console.log(url)
+
+        const response = await fetch(url);
+
+        const data: [NASAAstroDay] = await response.json()
+
+        return data
+    }
+}
+
+export enum FeedType {
+    All = 'all',
+    News = 'news',
+    Tech = 'tech',
+    Finance = 'finance',
 }

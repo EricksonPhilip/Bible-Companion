@@ -98,7 +98,9 @@ const styles = StyleSheet.create({
   title: { color: '#F5F5F5', fontSize: 22, fontWeight: '800' },
   subtitle: { color: '#81A3A5', fontSize: 13, marginTop: 2 },
   grid: { padding: 20, paddingBottom: 40 },
-  gridRow: { justifyContent: 'space-between', marginBottom: 12 },
+  // Keep incomplete rows aligned from the left instead of pushing the last
+  // verse to the far right (for example, verses 26 and 27).
+  gridRow: { justifyContent: 'flex-start', marginBottom: 12 },
   helperText: {
     color: '#81A3A5',
     fontSize: 15,
@@ -108,6 +110,7 @@ const styles = StyleSheet.create({
   verseTile: {
     width: 54,
     height: 54,
+    marginRight: 12,
     borderRadius: 14,
     backgroundColor: '#0A2B2D',
     borderWidth: 1,
